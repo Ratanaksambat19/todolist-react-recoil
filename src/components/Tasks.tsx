@@ -1,13 +1,15 @@
 import React from 'react'
+import {useRecoilValue} from 'recoil'
+import {todoListState} from '../recoil/todoAtoms'
 import {Task} from './Task'
 
 export const Tasks: React.FC = () => {
+    const todoList = useRecoilValue(todoListState)
     return (
         <div>
-            <Task id={0} />
-            <Task id={1} />
-            <Task id={2} />
-            <Task id={3} />
+            {todoList.map((todoItem, index) => (
+                <Task key={todoItem} id={todoItem} />
+            ))}
         </div>
     )
 }

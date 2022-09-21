@@ -1,5 +1,7 @@
 import React from 'react'
+import {useRecoilState} from 'recoil'
 import styled from 'styled-components'
+import {nightModeState} from '../recoil/toggleAtom'
 
 const Container = styled.div`
     width: 60px;
@@ -39,18 +41,21 @@ type SwitchProps = {
     onChange: (value: boolean) => void
 }
 
-export const Switch: React.FC<SwitchProps> = ({value: on, onChange}) => (
-    <Container onClick={() => onChange(!on)}>
-        <Toggle
-            style={{
-                transform: `translateX(${on ? 30 : 0}px)`,
-            }}
-        >
-            <MoonOverlay
+export const Switch: React.FC = () => {
+    const [value, setValue] = useRecoilState(nightModeState)
+    return (
+        <Container onClick={() => setValue((prevState) => !prevState)}>
+            <Toggle
                 style={{
-                    transform: `scale(${on ? 1 : 0})`,
+                    transform: `translateX(${value ? 30 : 0}px)`,
                 }}
-            />
-        </Toggle>
-    </Container>
-)
+            >
+                <MoonOverlay
+                    style={{
+                        transform: `scale(${value ? 1 : 0})`,
+                    }}
+                />
+            </Toggle>
+        </Container>
+    )
+}

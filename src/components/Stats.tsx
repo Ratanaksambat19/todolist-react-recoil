@@ -1,6 +1,8 @@
 import React from 'react'
 import {Card} from './Card'
 import styled from 'styled-components'
+import {useRecoilValue} from 'recoil'
+import {todoListStatsState} from '../recoil/todoAtoms'
 
 const StatContainer = styled.div`
     flex: 1;
@@ -47,11 +49,15 @@ const Container = styled(Card)`
 `
 
 export const Stats: React.FC = () => {
+    const {totalCompletedNum, totalUncompletedNum} = useRecoilValue(
+        todoListStatsState,
+    )
+
     return (
         <Container>
-            <Stat label="Tasks Complete" value="1" />
+            <Stat label="Tasks Complete" value={totalCompletedNum} />
             <Divider />
-            <Stat label="Tasks Remaining" value="3" />
+            <Stat label="Tasks Remaining" value={totalUncompletedNum} />
         </Container>
     )
 }

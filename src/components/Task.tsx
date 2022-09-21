@@ -2,6 +2,8 @@ import React from 'react'
 import styled, {css} from 'styled-components'
 import checkIconSvg from './check.svg'
 import {Card} from './Card'
+import {useRecoilState} from 'recoil'
+import {todoItemState} from '../recoil/todoAtoms'
 
 export const TextStyle = css`
     font-size: 17px;
@@ -65,24 +67,27 @@ const Strikethrough = styled.div<{checked: boolean}>`
 `
 
 export const Task: React.FC<{id: number}> = ({id}) => {
-    const complete = false
-    const label = `Example task ${id}`
+    const [todoItem, setTodoItem] = useRecoilState(todoItemState(id))
 
     return (
         <Container
             onClick={() => {
                 // Toggle completed
+                setTodoItem({
+                    ...todoItem,
+                    isCompleted: !todoItem.isCompleted,
+                })
             }}
         >
-            <Check checked={complete}>
+            <Check checked={todoItem.isCompleted}>
                 <CheckIcon
                     src={checkIconSvg}
-                    style={{opacity: complete ? 1 : 0}}
+                    style={{opacity: todoItem.isCompleted ? 1 : 0}}
                 />
             </Check>
             <Label>
-                {label}
-                <Strikethrough checked={complete} />
+                {todoItem.label}
+                <Strikethrough checked={todoItem.isCompleted} />
             </Label>
         </Container>
     )
