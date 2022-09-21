@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {useRecoilState, useSetRecoilState} from 'recoil'
+import {useRecoilCallback, useRecoilState, useSetRecoilState} from 'recoil'
 import styled from 'styled-components'
 import {todoItemState, todoListState} from '../recoil/todoAtoms'
 import {Container as TaskContainer, TextStyle as TaskTextStyle} from './Task'
@@ -24,6 +24,17 @@ export const Input: React.FC = () => {
     const [label, setLabel] = useState('')
     const [todoList, setTodoList] = useRecoilState(todoListState)
     const setTodoItem = useSetRecoilState(todoItemState(todoList.length))
+
+    const addTodo = () => {
+        const newTodoId = todoList.length
+        setTodoList([...todoList, newTodoId])
+        setTodoItem({
+            id: newTodoId,
+            label,
+            isCompleted: false,
+        })
+    }
+
     return (
         <TaskContainer>
             <InsertInput
@@ -37,12 +48,7 @@ export const Input: React.FC = () => {
                 onKeyUp={({keyCode}) => {
                     if (keyCode === 13 && label !== '') {
                         // Insert new task
-                        setTodoList([...todoList, todoList.length])
-                        setTodoItem({
-                            id: todoList.length,
-                            label,
-                            isCompleted: false,
-                        })
+                        addTodo()
                         setLabel('')
                     }
                 }}
